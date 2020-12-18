@@ -1,0 +1,19 @@
+---
+- name: Upload the custom Ubuntu ISO to the vSphere datastore and create virtual Machines
+  hosts: all
+  vars_files:
+    - ./vars/rhelvariables.yml
+  tasks:
+  - name: Upload the RHEL Ubuntu ISO to the vSphere datastore
+    vsphere_copy:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{vcenter_username }}"
+      password: "{{vcenter_password }}"
+      validate_certs: no
+      datacenter: "{{ DataCenter }}"
+      src: ./atomic0-cidata.iso
+      datastore: "{{ Datastore }}"
+      path: "{{ DatastoreDir }}/{{ RHELNewISO }}"
+
+    delegate_to: localhost 
+

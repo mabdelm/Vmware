@@ -1,0 +1,29 @@
+vm:
+  - name: test101                  #VM name
+    state: poweredon                #VM state
+    esxi_hostname: esxi.example.com # This is hostname of particular ESXi that the vm will be deploye on
+    size_gb: 16                     #VM Disk Size
+    type: thin                      #VM Disk Type
+    Datastore: datastore1           #Datastore where the VM will be located 
+    memory_mb: 1024                 #VM memory in mb  
+    num_cpus: 2                     #VM number of cpu's
+    ip: 192.168.58.111 
+    num_cpu_cores_per_socket: 2     #VM number of cpu's per socket
+    scsi: paravirtual               # VM SCSI Adapter type
+    Network_name: VM Network        # VM NIC port group
+    device_type: vmxnet3            #VM Network adapter type
+    
+  - name: test102                 #VM name
+    state: poweredon                #VM state
+    esxi_hostname: esxi.example.com # This is hostname of particular ESXi that the vm will be deploye on
+    size_gb: 16                     #VM Disk Size
+    type: thin                      #VM Disk Type
+    Datastore: datastore1           #Datastore where the VM will be located 
+    memory_mb: 2048                 #VM memory in mb  
+    num_cpus: 2                     #VM number of cpu's
+    ip: 192.168.58.112
+    num_cpu_cores_per_socket: 2     #VM number of cpu's per socket
+    scsi: paravirtual               # VM SCSI Adapter type
+    Network_name: VM Network        # VM NIC port group
+    device_type: vmxnet3            #VM Network adapter type
+

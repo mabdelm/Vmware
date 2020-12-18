@@ -1,0 +1,53 @@
+---
+- name: Upload the custom Ubuntu ISO to the vSphere datastore and create virtual Machines 
+  hosts: all
+  vars_files:
+    - ./vars/variables.yml
+  tasks:
+  - name: Upload the custom Ubuntu ISO to the vSphere datastore
+    vsphere_copy: 
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{vcenter_username }}"
+      password: "{{vcenter_password }}"
+      validate_certs: no
+      datacenter: "{{ DataCenter }}"
+      src: "{{ TempDir }}/{{ UbuntuNewISO }}" 
+      datastore: "{{ Datastore }}"
+      path: "{{ DatastoreDir }}/{{ UbuntuNewISO }}"  
+    delegate_to: localhost      
+  - name: Create a virtual machine on given ESXi hostname
+    vmware_guest:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: no
+      datacenter: "{{ DataCenter }}"
+      folder: /Automation/vm/
+      name: test-1
+      state: poweredon
+      guest_id: ubuntu64Guest
+    # This is hostname of particular ESXi server on which user wants VM to be deployed
+      esxi_hostname: esxi.example.com
+      disk:
+      - size_gb: 16
+        type: thin
+        datastore: "{{Datastore}}"
+      hardware:
+        memory_mb: 1024
+        num_cpus: 2
+        num_cpu_cores_per_socket: 2
+        scsi: paravirtual
+      networks:
+      - name: VM Network
+        ip: 192.168.58.199
+        netmask: 255.255.255.0
+        gateway: 192.168.58.2
+        domain: example.com
+        device_type: vmxnet3
+        dns_servers:
+        - 192.168.58.162
+      cdrom:
+        type: iso
+        iso_path: "[{{ Datastore }}]/{{ Datastore }}/iso/{{UbuntuNewISO}}" 
+    delegate_to: localhost
+    register: deploy_vm

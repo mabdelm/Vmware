@@ -1,0 +1,61 @@
+---
+- name: Check if ubuntu iso image exist if not download then create custom image
+  hosts: localhost
+  vars_files:
+    - ./vars/variables.yml
+  tasks:
+  - name: Check if Ubuntu ISO exists locally on Ansible Controller
+    stat:
+      path: "{{ TempDir }}/{{ UbuntuISO }}"
+    register: InstallerFileCheck
+  - name: print the Registered variable
+    debug:
+      var: InstallerFileCheck
+  - name: Download Ubuntu ISO (if ISO file doesn't exist locally)
+    get_url:
+      url:  "{{ UbuntuISO_URL }}{{ UbuntuISO }}"
+      dest: "{{ TempDir }}/{{ UbuntuISO }}"
+    when:
+      - InstallerFileCheck.stat.exists != true
+  - name: Mount Ubuntu ISO
+    action: mount name="{{ WorkingDir }}/iso" src="{{ TempDir }}/{{ UbuntuISO }}" opts=loop fstype=iso9660 state=mounted
+
+  - name: Copy txt.cfg from Ubuntu ISO
+    copy:
+      src: "{{ WorkingDir }}/iso/isolinux/txt.cfg"
+      dest: "{{ WorkingDir }}/isocopy/isolinux/"
+      mode: "666"
+
+  - name: Edit txt.cfg to modify append line
+    replace:
+      path: "{{ WorkingDir }}/isocopy/isolinux/txt.cfg"
+      regexp: "{{item.src}}"
+      replace: "{{item.dest}}"
+    loop:  
+      - src: 'append   initrd=/casper/initrd quiet  ---'
+        dest: 'append   initrd=/casper/initrd quiet --- autoinstall ds=nocloud;s=/cdrom/autoinstall/' 
+  
+  - name: Create directory to store user-data and meta-data
+    file:
+      path: "{{ WorkingDir }}/isocopy/autoinstall"
+      state: directory
+      
+  - name: Copy user-data file to directory
+    template:
+      src: ./templates/Ubuntu_user-data.j2
+      dest: "{{ WorkingDir }}/isocopy/autoinstall/user-data"
+      mode: "666"
+
+  - name: Create empty meta-data file in directory
+    file:
+      path: "{{ WorkingDir }}/isocopy/autoinstall/meta-data"
+      state: touch
+      mode: "666"
+  - name: Create custom Ubuntu ISO
+    command: xorrisofs -relaxed-filenames -J -R -o {{ TempDir }}/{{ UbuntuNewISO }} -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table {{ WorkingDir }}/iso/ {{ WorkingDir }}/isocopy/
+    args:
+      chdir: "{{ WorkingDir }}/isocopy/"
+  - name: Unmount Ubuntu ISO
+    action: mount name="{{ WorkingDir }}/iso" src="{{ TempDir }}/{{ UbuntuISO }}" fstype=iso9660 state=absent
+ 
+ 

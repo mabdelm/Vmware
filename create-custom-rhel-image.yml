@@ -1,0 +1,26 @@
+---
+- name: Check if ubuntu iso image exist if not download then create custom image
+  hosts: localhost
+  vars_files: 
+    - ./vars/rhelvariables.yml 
+  tasks: 
+  - name: Create directory to store user-data and meta-data
+    file:
+      path: "{{ WorkingDir }}/isocopy/autoinstall"
+      state: directory
+      
+  - name: Copy user-data file to directory
+    template:
+      src: ./templates/RHEL_user_data.j2
+      dest: "{{ WorkingDir }}/isocopy/autoinstall/user-data"
+      mode: "666"
+
+  - name: Copy meta-data file in directory
+    template:
+      src: ./templates/RHEL_meta_data.j2
+      dest: "{{ WorkingDir }}/isocopy/autoinstall/meta-data"
+      mode: "666"
+
+  - name: Create custom RHEL  ISO
+    command: genisoimage -output atomic0-cidata.iso -volid cidata -joliet -rock  {{ WorkingDir }}/isocopy/autoinstall/user-data {{ WorkingDir }}/isocopy/autoinstall/meta-data
+

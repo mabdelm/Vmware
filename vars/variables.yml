@@ -1,0 +1,28 @@
+---
+    DataCenter: Automation                              # vCenter datacenter
+    vSphereCluster: Automation                          # vCenter cluster
+    VMFolder: /Automation/vm/datastore1                 # vCenter VM folder
+    Datastore: datastore1                               # vSphere datastore
+    DatastoreDir: /datastore1/iso                       # Datastore directory on vcenter server ISO images will be copied to 
+    UbuntuISO: ubuntu-20.04.1-live-server-amd64.iso     # Ubuntu ISO filename & ISO image name as on ubuntu website
+    UbuntuISO_URL: https://releases.ubuntu.com/20.04/   # Ubuntu ISO URL
+    UbuntuNewISO: ubuntu2004.iso                        # new custom image name
+    WorkingDir: /home/devops/automation/esxi/ubuntu20   # working directory 
+    TempDir: /home/devops/automation/esxi/tmp           # temp directory
+    UbuntuVMName: test                                  # Ubuntu VM name of the virtual machine
+    UbuntuVMDiskSize: 10                                # Ubuntu VM disksize in gigabytes
+    UbuntuVMMemorySize: 2048                            # Ubuntu VM memory size in megabytes
+    UbuntuVMCPUs: 1                                     # Ubuntu VM number of CPUs
+    UbuntuVMCPUCores: 1                                 # Ubuntu VM number of cores
+    UbuntuVMPortGroup: Production-vlan                        # Ubuntu VM vSphere portgroup
+    UbuntuOSLocale: en_US                               # Ubuntu OS locale
+    UbuntuOSKeyboardLayout: en                          # Ubuntu OS keyboard layout
+    UbuntuOSKeyboardVariant: us                         # Ubuntu OS keyboard variant
+    UbuntuOSIPv4Address: 192.168.58.190/24                 # Ubuntu OS IPv4 address
+    UbuntuOSIPv4Gateway: 192.168.58.2                    # Ubuntu OS IPv4 gateway
+    UbuntuOSIPv4DNS: 192.168.58.162                         # Ubuntu OS DNS server
+    UbuntuOSSearchDomain: example.com                      # Ubuntu OS DNS search domain
+    UbuntuOSHostname: test                       # Ubuntu OS hostname
+    UbuntuOSUser: ibm                                  # Ubuntu OS username
+    UbuntuOSPassword: VMware1!                         # Ubuntu OS password
+    UbuntuVMName: test

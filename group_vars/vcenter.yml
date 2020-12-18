@@ -1,0 +1,4 @@
+vcenter_hostname: vcenter.example.com
+vcenter_username: administrator@vsphere.local
+vcenter_password: P@ssw0rd
+
