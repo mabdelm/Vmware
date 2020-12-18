@@ -1,0 +1,19 @@
+ - name: Provide inforMation about vCenter
+    vmware_about_facts:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+    delegate_to: localhost
+    register: vcenter_about_info
+  - name: Add a VMware vSwitch without any physical NIC attached
+    vmware_vswitch:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      switch: vswitch_0001
+      mtu: 9000
+      esxi_hostname: esxi.example.com
+      validate_certs: no
+    delegate_to: localhost
+
