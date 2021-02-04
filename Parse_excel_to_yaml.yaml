@@ -1,0 +1,15 @@
+# This play will be used to parse the excel rows to list of dictionaries
+---       
+- name: Parse the excel sheet                                           
+  hosts: localhost
+  become: true
+  tasks:  
+  - name: Read users from CSV file and return a list
+    read_csv:
+            path: /home/devops/Downloads/Book1.csv 
+    register: vms
+    delegate_to: localhost
+  - name: copy the list to excel_vars.yml file
+    copy:
+      content: "{{vms.list | to_nice_yaml}}"
+      dest: ./vars/VMS_Excel_paresd_vars.yml

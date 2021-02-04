@@ -1,0 +1,60 @@
+vm:
+  -   CPU_Reservation: 2048
+      Hard_Disk_Drive: 20
+      Memory: 1024
+      Memory_Reservation: 1024
+      Minimum_CPU_Speed: 2.3
+      PCPU_VCPU: 1:01'
+      QTY VMs: 1
+      Release: 3
+      Virtual_Application : Avaya Aura SAL Gateway 2.0
+      vCPU: 2
+      vNICs: 2
+      state: poweredon                #VM state
+      esxi_hostname: esxi.example.com # This is hostname of particular ESXi that the vm will be deploye on
+      type: thin                      #VM Disk Type
+      Datastore: datastore1           #Datastore where the VM will be located
+      ip: 192.168.58.111
+      num_cpu_cores_per_socket: 2     #VM number of cpu's per socket
+      scsi: paravirtual               # VM SCSI Adapter type
+      networks:
+        - name: VM Network  
+          ip: 10.10.10.9
+          netmask: 255.255.255.0
+          Network_name: VM Network        # VM NIC port group
+          device_type: vmxnet3            #VM Network adapter type   
+        - name: VM Network
+          ip: 10.10.10.10
+          netmask: 255.255.255.0   
+          Network_name: VM Network        # VM NIC port group
+          device_type: vmxnet3            #VM Network adapter type
+
+  -   CPU_Reservation: 2048
+      Hard_Disk_Drive: 20
+      Memory: 1024
+      Memory_Reservation: 1024
+      Minimum_CPU_Speed: 2.3
+      PCPU_VCPU: 1:01
+      QTY_VMs: 1
+      Release: 3
+      Virtual_Application : Avaya Aura SAL Gateway 3.0
+      vCPU: 2
+      vNICs: 2
+      state: poweredon                #VM state
+      esxi_hostname: esxi.example.com # This is hostname of particular ESXi that the vm will be deploye on
+      type: thin                      #VM Disk Type
+      Datastore: datastore1           #Datastore where the VM will be located 
+      ip: 192.168.58.112
+      num_cpu_cores_per_socket: 2     #VM number of cpu's per socket
+      scsi: paravirtual    # VM SCSI Adapter type
+      networks:
+        - name: VM Network
+          ip: 10.10.10.13
+          netmask: 255.255.255.0
+          Network_name: VM Network        # VM NIC port group
+          device_type: vmxnet3            #VM Network adapter type
+        - name: VM Network
+          ip: 10.10.10.114
+          netmask: 255.255.255.0
+          Network_name: VM Network        # VM NIC port group
+          device_type: vmxnet3            #VM Network adapter type

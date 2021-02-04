@@ -1,0 +1,8 @@
+---
+instance:
+  name:
+    - instance1
+    - instance2 
+  hostname:
+    - host01
+    - host02

@@ -1,0 +1,51 @@
+- name: Upload the custom Ubuntu ISO to the vSphere datastore and create virtual Machines
+  hosts: all
+  vars_files:
+    - ./vars/variables.yml
+    - ./vars/VMS_Excel_paresd_vars.yml
+  tasks:
+          
+  - name:  Clone a virtual machine from Linux template and customize
+    vmware_guest:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: no
+      datacenter: "{{ DataCenter }}"
+      state: "{{item.0.state}}"
+      folder: /Automation/vm
+      template: test-1
+      datastore: "{{item.0.Datastore}}"
+      disk:
+      - size_gb: "{{ item.0.Hard_Disk_Drive }}"
+        type: thin
+        datastore: "{{item.0.Datastore}}"
+      hardware:
+        memory_mb: "{{item.0.Memory}}"
+        num_cpus: "{{item.0.vCPU}}"
+        num_cpu_cores_per_socket: "{{item.0.num_cpu_cores_per_socket}}"
+        scsi: "{{item.0.scsi}}"
+        #memory_reservation_lock: True
+        #mem_limit: 1024
+        mem_reservation: "{{item.0.Memory_Reservation}}"
+        # cpu_limit: 8096
+        cpu_reservation: "{{item.0.CPU_Reservation}}"
+        #max_connections: 5
+        # hotadd_cpu: True
+        #hotremove_cpu: True
+        #hotadd_memory: False
+        #boot_firmware: "efi"
+      name: "{{item.0.Virtual_Application}}"
+      esxi_hostname: "{{item.0.esxi_hostname}}"
+      networks:
+      - name: "{{item.1.Network_name}}"
+        ip: "{{item.1.ip}}"
+        netmask: 255.255.255.0
+        wait_for_ip_address: yes
+      - name: "{{item.1.Network_name}}"
+        ip: "{{item.1.ip}}"
+        netmask: 255.255.255.0
+        wait_for_ip_address: yes
+    delegate_to: localhost
+    loop: "{{vm | subelements('networks')}}"
+

@@ -2,7 +2,8 @@
 - name: Check if ubuntu iso image exist if not download then create custom image
   hosts: localhost
   vars_files: 
-    - ./vars/rhelvariables.yml 
+    - ./vars/rhelvariables.yml
+    - ./vars/rhel-metadata-vars.yml  
   tasks: 
   - name: Create directory to store user-data and meta-data
     file:
@@ -23,4 +24,11 @@
 
   - name: Create custom RHEL  ISO
     command: genisoimage -output atomic0-cidata.iso -volid cidata -joliet -rock  {{ WorkingDir }}/isocopy/autoinstall/user-data {{ WorkingDir }}/isocopy/autoinstall/meta-data
-
+    notify: custom_image_created
+  handlers:  
+  - name: Create new custom image after replacement
+    command: sed -i 's/0]/1]/g' ./templates/RHEL_meta_data.j2 
+    listen: custom_image_created
+  post_tasks: 
+  - name: create custom image
+    import_tasks: create-custom-rhel-image-tasks.yml
